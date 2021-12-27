@@ -34,19 +34,21 @@
                         <div class="panel-content">
                            <div class="d-flex flex-wrap demo demo-h-spacing mt-3 mb-3">
 
+                                   
+                                   
                             <?php
-
                                 $db = new mysqli('127.0.0.1', 'root', '', 'practice');
                                 $workers = $db->query("SELECT * FROM workers");
 
-                                $i = 0;
+                                $i = 0;    //номер картинки. Названия картинок - числа от 0
+                                   
                                 while(true){
                                     $worker = $workers->fetch_assoc();
                                     if($worker==null)
                                         break;
                                         
                                     $index = strrpos($worker['account'], '@');
-                                    $link_name = substr($worker['account'], $index);
+                                    $link_name = substr($worker['account'], $index);   //как будет подписываться ссылка. можно заметить, что она всегда начинается с @
                                     ?>
                                         <div class="<?=$worker['banned']?'banned':''?> rounded-pill bg-white shadow-sm p-2 border-faded mr-3 d-flex flex-row align-items-center justify-content-center flex-shrink-0">
                                             <img src="img/demo/authors/<?=$i?>.png" alt="<?=$worker['name']?>" class="img-thumbnail img-responsive rounded-circle" style="width:5rem; height: 5rem;">
