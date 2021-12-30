@@ -40,45 +40,53 @@
 
                                 
                                 <?php
-                                    $catalog = [  //предполагается, что в папке могут содержатся несколько подпапок. Есть папки с подпапками и с элементами. В данном случае в папке Главная есть папки php и javascript
-                                        'Главная',
-                                        [
-                                            'PHP', //имя папки − ее нулевой элемент
-                                            [
-                                                'Функции',
-                                                'php_info',  //элементы папки Функции
-                                                'strlen',
-                                                'trim'
-                                            ]
-                                        ],
-                                        [
-                                            'Javascript',
-                                            [
-                                                'Функции'
-                                            ]
-                                        ]
-                                        
-                                    ];
+                                    class Element{
+                                        public $name;
+                                        public $link;
+                                        public $parent;
+                                        public $is_folder;
+                                        function __construct($name, $link, $parent, $is_folder = true){
+                                            $this->name = $name;
+                                            $this->link = $link;
+                                            $this->parent = $parent;
+                                            $this->is_folder = $is_folder;
+                                        }
+                                    }
 
-                                    $number = $_GET['number'];  //переменная в массиве get определяет, насколько глубоко нужно зайти
-
-                                    for($i = 0; $i<$number; $i++){  //цикл вставляет элементы li
-
-                                        $name = $catalog;
-                                        for($j = 0; $j<$i; $j++){  //цикл определяет элемент в каталоге
-                                            if(!is_array($name))
-                                                break;
-                                            $name = $name[1];
+                                    class Catalog{
+                                        private $catalog = array();
+                                        function addElement($name, $link, $parent, $is_folder = true){
+                                            $this->catalog[] = new Element($name, $link, $parent, $is_folder);
                                         }
 
-                                        //вставка элемента
-                                        if(is_array($name)){
+                                        function findChild($parent_link){
+                                            foreach($this->catalog as $i){
+                                                if($i->parent == $parent_link)
+                                                    return $i;
+                                            }
+                                        }
+                                    }
+
+                                    $catalog = new Catalog;
+                                    $catalog->addElement('Главная', '//route1.ru', null);
+                                    $catalog->addElement('PHP', 'php', '//route1.ru');
+                                    $catalog->addElement('Функции', 'functions', 'php');
+                                    $catalog->addElement('phpinfo()', 'phpinfo', 'functions', false);
+
+                                    
+                                    $element = new Element(null, null, null);
+                                    $link = '';
+                                    while(true){
+                                        $element = $catalog->findChild($element->link);
+                                        $link .= $element->link . '/';
+
+                                        if($element->is_folder){
                                             ?>
-                                                <li class="breadcrumb-item"><a href="task_3.php?number=<?=$i+1?>"><?=$name[0]?></a></li>
+                                                <li class="breadcrumb-item"><a href="<?=$link?>"><?=$element->name?></a></li>
                                             <?php
                                         }else{
                                             ?>
-                                                <li class="breadcrumb-item active"><?=$name?></li>
+                                                <li class="breadcrumb-item active"><?=$element->name?></a></li>
                                             <?php
                                             break;
                                         }
