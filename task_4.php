@@ -39,55 +39,62 @@
 
 
                             <?php
-                                Class ProgressBar{
-                                    public $name;
-                                    public $value;
-                                    public $limit;
-                                    public $color;
-                                    public $unit;
-                                    public $show_limit;
-
-                                    function Show(){
-                                        $filling = $this->value / $this->limit * 100;
-                                        ?>
-                                            <div class="d-flex mt-2">
-                                                <?= $this->name; ?>
-                                                <span class="d-inline-block ml-auto">
-                                                    <?= $this->value . ($this->show_limit ? ' / '.$this->limit : '') .' '. $this->unit;?>
-                                                </span>
-                                            </div>
-                                            <div class="progress progress-sm mb-3">
-                                                <div
-                                                class="progress-bar"
-                                                role="progressbar"
-                                                style="width: <?=$filling?>%; background: <?=$this->color?>;"
-                                                aria-valuenow="<?=$filling?>"
-                                                aria-valuemin="0"
-                                                aria-valuemax="100"></div>
-                                            </div>
-                                        <?php
-                                    }
-
-                                    function __construct($name, $value, $limit, $color, $unit='', $show_limit=false)
-                                    {
-                                        $this->name = $name;
-                                        $this->value = $value;
-                                        $this->limit = $limit;
-                                        $this->color = $color;
-                                        $this->unit = $unit;
-                                        $this->show_limit = $show_limit;
-                                    }
-                                }
-
-                                $progress_bars=[
-                                    new ProgressBar('My Tasks', 130, 500, '#aaa555', '', true),
-                                    new ProgressBar('Transfered', 440, 1000, '#345667', 'TB', true),
-                                    new ProgressBar('Bugs Squashed', 77, 100, '#23546e', '%'),
-                                    new ProgressBar('User Testing', 7, 10, '#ee4e7e', 'days')
+                                $progress_bars = [
+                                    [
+                                        'name'=>'My Tasks',
+                                        'value'=>130,
+                                        'limit'=>500,
+                                        'color'=>'#aaa555',
+                                        'unit'=>'',
+                                        'show_limit'=>true
+                                    ],
+                                    [
+                                        'name'=>'Transfered',
+                                        'value'=>440,
+                                        'limit'=>1000,
+                                        'color'=>'#345667',
+                                        'unit'=>'TB',
+                                        'show_limit'=>true
+                                    ],
+                                    [
+                                        'name'=>'Bugs Squashed',
+                                        'value'=>77,
+                                        'limit'=>100,
+                                        'color'=>'#23546e',
+                                        'unit'=>'%',
+                                        'show_limit'=>false
+                                    ],
+                                    [
+                                        'name'=>'User Testing',
+                                        'value'=>7,
+                                        'limit'=>10,
+                                        'color'=>'#23546e',
+                                        'unit'=>'days',
+                                        'show_limit'=>false
+                                    ]
                                 ];
 
-                                foreach($progress_bars as $item)
-                                    $item->Show();
+                                foreach($progress_bars as $item){
+                                    $filling = $item['value'] / $item['limit'] * 100;
+                                    ?>
+                                        <div class="d-flex mt-2">
+                                            <?= $item['name'] ?>
+                                            <span class="d-inline-block ml-auto">
+                                                <?= $item['value'] . ($item['show_limit'] ? ' / '.$item['limit'] : '') .' '. $item['unit']?>
+                                            </span>
+                                        </div>
+                                        <div class="progress progress-sm mb-3">
+                                            <div
+                                            class="progress-bar"
+                                            role="progressbar"
+                                            style="width: <?=$filling?>%; background: <?=$item['color']?>;"
+                                            aria-valuenow="<?=$filling?>"
+                                            aria-valuemin="0"
+                                            aria-valuemax="100"></div>
+                                        </div>
+                                    <?php
+                                }
+                                    
                             ?>
 
 
