@@ -51,13 +51,28 @@
 
 
                                         <?php
-                                            $list = ['Reports file', 'Analytics graphs', 'Export download', 'Storage'];
+                                            $list = [
+                                                    [
+                                                            'name'=>'Reports',
+                                                            'value'=>'reports file'
+                                                    ],
+                                                    [
+                                                            'name'=>'Analytics',
+                                                            'value'=>'analytics graphs'
+                                                    ],
+                                                    [
+                                                            'name'=>'Export',
+                                                            'value'=>'Export download'
+                                                    ],
+                                                    [
+                                                            'name'=>'Storage',
+                                                            'value'=>'storage'
+                                                    ]
+                                            ];
                                             foreach($list as $item){
-                                                $index = strrpos($item, ' ');
-                                                $name = $index==false ? $item : substr($item, 0, $index);
                                                 ?>
                                                     <li class="list-group-item">
-                                                        <span data-filter-tags="<?=strtolower($item)?>"><?=$name?></span>
+                                                        <span data-filter-tags="<?=$item['value']?>"><?=$item['name']?></span>
                                                     </li>
                                                 <?php
                                             }
