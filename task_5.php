@@ -37,34 +37,37 @@
                                    
                                    
                             <?php
-                                $db = new mysqli('127.0.0.1', 'root', '', 'practice');
-                                $workers = $db->query("SELECT * FROM workers");
-
-                                $i = 0;    //номер картинки. Названия картинок - числа от 0
+                                $people = [
+                                        [
+                                        "image" => "img/demo/authors/sunny.png",
+                                        "image_alt" => "Sunny A.",
+                                        "name" => "Sunny A. (UI/UX Expert)",
+                                        "job_title" => "Lead Author",
+                                        "twitter_link_href" => "https://twitter.com/@myplaneticket",
+                                        "twitter_link_text" => "@myplaneticket",
+                                        "email_link_href" => "https://wrapbootstrap.com/user/
+                                        myorange",
+                                        "email_link_text"=>"<i class=\"fal fa-envelope\"></i>",
+                                        "email_link_title"=>"Contact Sunny"
+                                        ]
+                                ];
                                    
-                                while(true){
-                                    $worker = $workers->fetch_assoc();
-                                    if($worker==null)
-                                        break;
-                                        
-                                    $index = strrpos($worker['account'], '@');
-                                    $link_name = substr($worker['account'], $index);   //как будет подписываться ссылка. можно заметить, что она всегда начинается с @
+                                foreach($people as $person){
                                     ?>
-                                        <div class="<?=$worker['banned']?'banned':''?> rounded-pill bg-white shadow-sm p-2 border-faded mr-3 d-flex flex-row align-items-center justify-content-center flex-shrink-0">
-                                            <img src="img/demo/authors/<?=$i?>.png" alt="<?=$worker['name']?>" class="img-thumbnail img-responsive rounded-circle" style="width:5rem; height: 5rem;">
+                                        <div class="rounded-pill bg-white shadow-sm p-2 border-faded mr-3 d-flex flex-row align-items-center justify-content-center flex-shrink-0">
+                                            <img src="<?=$person['image']?>" alt="<?=$person['image_alt']?>" class="img-thumbnail img-responsive rounded-circle" style="width:5rem; height: 5rem;">
                                             <div class="ml-2 mr-3">
                                                 <h5 class="m-0">
-                                                    <?=$worker['name']?> (<?=$worker['description']?>)
+                                                    <?=$person['name']?>
                                                     <small class="m-0 fw-300">
-                                                        <?=$worker['post']?>
+                                                        <?=$person['job_title']?>
                                                     </small>
                                                 </h5>
-                                                <a href="<?=$worker['account']?>" class="text-info fs-sm" target="_blank"><?=$link_name?></a> -
-                                                <a href="<?=$worker['chat']?>" class="text-info fs-sm" target="_blank" title="Contact Sunny"><i class="fal fa-envelope"></i></a>
+                                                <a href="<?=$person['twitter_link_href']?>" class="text-info fs-sm" target="_blank"><?=$person['twitter_link_text']?></a> -
+                                                <a href="<?=$person['email_link_href']?>" class="text-info fs-sm" target="_blank" title="<?=$person['email_link_title']?>"><?=$person['email_link_text']?></a>
                                             </div>
                                         </div>       
                                     <?php
-                                    $i++;
                                 }
                             ?>
 
