@@ -25,34 +25,60 @@ class Database{
         $stmt->execute($values);
     }
 
-    function getRows($table, array $requirements = null){
-        $sql = "SELECT * FROM $table ";
-        if(isset($requirements)){
-            $sql .= 'WHERE ';
-
-            $keys = array_keys($requirements);
-            foreach($keys as $key){
-                $sql .= $key.'=:'.$key.' AND ';
+    private function identify(&$sql, array $conditions){
+        if($conditions == null)
+            return;
+        $sql .= ' WHERE ';
+        $parameters = [];
+        foreach($conditions as $i){
+            if($i[1] === null){
+                if($i[2] == '=')
+                    $sql .= $i[0].' IS NULL AND ';
+                elseif($i[2] == '!=')
+                    $sql .= $i[0].' IS NOT NULL AND ';
             }
-            $sql = substr($sql, 0, strlen($sql)-5);
+            else{
+                if(!isset($i[2]))
+                    $i[2] = '=';
+                $index = array_search($i, $conditions);
+                $sql .= $i[0].$i[2].':a'.$index.' AND ';
+                $parameters["a$index"] = $i[1];
+            }
         }
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($requirements);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $sql = substr($sql, 0, strlen($sql)-5);
+        return $parameters;
     }
 
-    function deleteRows($table, array $requirements = null){
-        $sql = "DELETE FROM $table ";
-        if(isset($requirements)){
-            $sql .= 'WHERE ';
+    function getRows($table, $field = null, ...$conditions){
+        if($field === null)
+            $field = '*';
 
-            $keys = array_keys($requirements);
-            foreach($keys as $key){
-                $sql .= $key.'=:'.$key.' AND ';
-            }
-            $sql = substr($sql, 0, strlen($sql)-5);
-        }
+        $sql = "SELECT $field FROM $table";
+
+        if($conditions != null && is_array($conditions[0][0]))
+            $conditions = $conditions[0];
+
+        $parameters = $this->identify($sql, $conditions);
+        
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($requirements);
+        $stmt->execute($parameters);
+
+        if($field === '*')
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        else
+            return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    function deleteRows($table, ...$conditions){
+        $sql = "DELETE FROM $table ";
+
+        if($conditions != null && is_array($conditions[0]))
+            $conditions = $conditions[0];
+
+        $parameters = $this->identify($sql, $conditions);
+
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute($parameters);
     }
 }
+$db = new Database('localhost', 'root', '', 'shop');
