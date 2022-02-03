@@ -1,12 +1,7 @@
 <?php
+require 'Files.php';
 
-function get_type($file_name){
-    $index = strripos($file_name, '.');
-    return substr($file_name, $index + 1);
-}
-
-require('Database.php');
-$db = new Database('localhost', 'root', '', 'practice');
+require 'Database.php';
 
 $file = $_FILES['images'];
 
