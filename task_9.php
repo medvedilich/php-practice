@@ -46,10 +46,8 @@
 
                                         <?php
                                             if($_GET['text'] != null){
-                                                $db = new mysqli('127.0.0.1', 'root', '', 'practice');
-                                                $statement = $db->prepare("INSERT INTO text (text) VALUES (?)");
-                                                $statement->bind_param('s', $_GET['text']);
-                                                $statement->execute();
+                                                require 'Database.php';
+                                                $db->createRow('text', [ 'text'=>$_GET['text] ]);
                                                 header('Location: task_9.php');
                                                 exit();
                                             }
