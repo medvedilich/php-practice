@@ -53,7 +53,6 @@
 
                                         <?php
                                             require 'Database.php';
-                                            $db = new Database('127.0.0.1', 'root', '', 'practice');
                                             $people = $db->getRows('people', null);
 
                                             foreach($people as $person){
