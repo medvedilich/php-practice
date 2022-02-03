@@ -58,20 +58,19 @@
 
                                         <?php
                                             if($_POST['text'] != null){
-                                                $db = new mysqli('127.0.0.1', 'root', '', 'practice');
-
-                                                $statement = $db->prepare("SELECT text FROM text WHERE text=?");
-                                                $statement->bind_param('s', $_POST['text']);
-                                                $statement->execute();
-                                                $result = $statement->get_result()->fetch_assoc();
-                                                if($result != null){
+                                                require 'Database.php';
+                                                    
+                                                $match = $db->getRows(
+                                                        'text', 
+                                                        'text', 
+                                                        ['text', $_POST['text'], '=']);
+                                                    
+                                                if($match != null){
                                                     header('Location: task_10.php?mistake=1');
                                                     exit();
                                                 }
-
-                                                $statement = $db->prepare("INSERT INTO text (text) VALUES (?)");
-                                                $statement->bind_param('s', $_POST['text']);
-                                                $statement->execute();
+                                                    
+                                                $db->createRow('text', [ 'text'=>$_POST['text'] ]);
                                                 header('Location: task_10.php');
                                                 exit();
                                             }
