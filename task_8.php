@@ -52,13 +52,11 @@
 
 
                                         <?php
-                                            $db = new mysqli('127.0.0.1', 'root', '', 'practice');
-                                            $people = $db->query('SELECT * FROM people');
+                                            require 'Database.php';
+                                            $db = new Database('127.0.0.1', 'root', '', 'practice');
+                                            $people = $db->getRows('people', null);
 
-                                            while(true){
-                                                $person = $people->fetch_assoc();
-                                                if($person == null)
-                                                    break;
+                                            foreach($people as $person){
                                                 ?>
                                                     <tr>
                                                         <th scope="row"><?=$person['id']?></th>
