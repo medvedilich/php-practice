@@ -5,8 +5,7 @@ session_start();
 $email = $_POST['email'];
 $password = $_POST['password'];
 
-$db = new Database('localhost', 'root', '', 'practice');
-$row = $db->getRows('users', ['email'=>$email])[0];
+$row = $db->getRows('users', null, ['email', $email, '='])[0];
 
 if($row == null || !password_verify($password, $row['password']))
     $_SESSION['error'] = 'Неверный логин или пароль';
